@@ -13,7 +13,10 @@ Media Sharing Platform Web Application :
 
 
 
-https://github.com/KhaledShata/Media-Sharing-Platform/assets/105244576/32699c48-d2a6-48e6-981b-456c80daa34f
+
+
+https://github.com/KhaledShata/Media-Sharing-Platform/assets/105244576/43406fd3-98d8-4924-979b-4aec5fc6bc93
+
 
 
 
