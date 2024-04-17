@@ -7,6 +7,7 @@ interface IFile {
   _id: string;
   gridfsId: string;
   numberOfLikes: number;
+  filename:string;
 }
 
 
@@ -18,11 +19,13 @@ function App() {
   const [updatingFileId, setUpdatingFileId] = useState<string | null>(null);
 
   const handleUpload = () => {
+    console.log("GOT FILE = " , file);
     if (!file) return;
     setIsLoading(true); 
     const formData = new FormData();
     formData.append('file', file);
 
+    console.log("DATA SENT TO SERVER" , formData);
     axios.post('http://localhost:3001/upload', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -35,6 +38,7 @@ function App() {
     .finally(() => {
       setIsLoading(false); 
     });
+    console.log(formData);
   };
 
   const handleDelete = (fileId) => {
@@ -120,7 +124,7 @@ function App() {
   const fileStyle = { border: '20px solid grey', marginBottom: '20px', padding: '10px', maxWidth: '500px', width: '100%' };
   const deleteButtonStyle = { color: 'white', backgroundColor: 'red', padding: '10px 20px', cursor: 'pointer', border: 'none' };
   const updateButtonStyle = { ...deleteButtonStyle, backgroundColor: 'green', marginLeft: '10px' };
-  const likeButtonStyle = { ...deleteButtonStyle, backgroundColor: 'blue', marginLeft: '10px' };
+  const likeButtonStyle = { ...deleteButtonStyle, backgroundColor: 'blue', marginLeft: '10px', marginRight:'10px' };
 
   
   return (
@@ -134,7 +138,7 @@ function App() {
       <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         {filesList.map((file, index) => (
           <div key={index} style={fileStyle}>
-            <p>ID : {file._id} - Likes: {file.numberOfLikes}</p>
+            <p>{file.filename} - Likes: {file.numberOfLikes}</p>
             {file.contentType.startsWith('image/') && (
               <img src={`http://localhost:3001/files/view/${file._id}?cb=${new Date().getTime()}`}  alt={file._id} style={{ width: '100%', maxWidth: '500px', height: 'auto' }} />
             )}
@@ -144,6 +148,11 @@ function App() {
                 Your browser does not support the video tag.
               </video>
             )}
+            <button style={likeButtonStyle} onClick={() => handleLike(file._id)}>Like</button>
+
+            <button style={likeButtonStyle} onClick={() => handleunLike(file._id)}>Unlike</button>
+
+            <button style={deleteButtonStyle} onClick={() => handleDelete(file._id)}>Delete</button>
 
             {updatingFileId === file._id ? (
               <>
@@ -153,9 +162,8 @@ function App() {
             ) : (
               <button style={updateButtonStyle} onClick={() => setUpdatingFileId(file._id)}>Update</button>
             )}
-            <button style={deleteButtonStyle} onClick={() => handleDelete(file._id)}>Delete</button>
-            <button style={likeButtonStyle} onClick={() => handleLike(file._id)}>Like</button>
-            <button style={likeButtonStyle} onClick={() => handleunLike(file._id)}>Unlike</button>
+            
+
           </div>
         ))}
       </div>
